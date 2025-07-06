@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tes Depresi - PHQ-9</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #ffecd2, #fcb69f);
+      padding: 30px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .question p {
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .option-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .option-button {
+      flex: 1;
+      min-width: 150px;
+      background-color: #f0f4f8;
+      border: none;
+      border-radius: 30px;
+      padding: 12px 20px;
+      font-weight: bold;
+      color: #003344;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      text-align: center;
+    }
+    .option-button:hover,
+    .option-button.selected {
+      background-color: #a5d6ff;
+      color: #000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    input[type="radio"] {
+      display: none;
+    }
+    button {
+      background-color: #00bcd4;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    #result {
+      margin-top: 30px;
+      padding: 20px;
+      border-radius: 10px;
+      background: #fff3cd;
+      border: 1px solid #ffeeba;
+    }
+    #dashboard {
+      margin-top: 40px;
+      padding: 20px;
+      background: #e8f5e9;
+      border-radius: 10px;
+      border: 1px solid #c8e6c9;
+    }
+  </style>
+</head>
+<body>
+  <h2 class="animate__animated animate__fadeIn">Tes Tingkat Depresi - PHQ-9</h2>
+  <form id="quizForm">
+    <div id="questions"></div>
+    <button type="submit">Lihat Hasil</button>
+  </form>
+
+  <div id="result"></div>
+
+  <div id="dashboard">
+    <div style="text-align: center; margin-top: 20px;">
+  <button onclick="clearHistory()" style="background-color: #f44336; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">
+    🗑️ Hapus Riwayat Tes
+  </button>
+</div>
+    <h3>📊 Rekap Hasil Tes Sebelumnya</h3>
+    <ul id="rekap"></ul>
+  </div>
+
+  <script>
+    const pertanyaan = [
+      "Kehilangan minat atau kesenangan dalam melakukan sesuatu",
+      "Merasa murung, sedih, atau putus asa",
+      "Kesulitan tidur atau tidur berlebihan",
+      "Merasa lelah atau kurang energi",
+      "Nafsu makan menurun atau berlebihan",
+      "Merasa buruk tentang diri sendiri - merasa gagal atau mengecewakan orang lain",
+      "Kesulitan berkonsentrasi",
+      "Gerakan atau bicara melambat atau terlalu gelisah",
+      "Pikiran bahwa Anda lebih baik mati atau menyakiti diri sendiri"
+    ];
+
+    const skala = ["Tidak sama sekali", "Beberapa hari", "Lebih dari setengah hari", "Hampir setiap hari"];
+
+    const questionsDiv = document.getElementById("questions");
+    pertanyaan.forEach((q, i) => {
+      const div = document.createElement("div");
+      div.className = "question";
+      let optionsHTML = skala.map((s, j) =>
+        `<label class="option-button" for="q${i}_${j}">
+          <input type="radio" name="q${i}" id="q${i}_${j}" value="${j}" required>
+          ${s}
+        </label>`).join("");
+      div.innerHTML = `<p>${i + 1}. ${q}</p><div class="option-buttons">${optionsHTML}</div>`;
+      questionsDiv.appendChild(div);
+    });
+
+    document.getElementById("quizForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      let skor = 0;
+      pertanyaan.forEach((_, i) => {
+        const val = document.querySelector(`input[name=q${i}]:checked`).value;
+        skor += parseInt(val);
+      });
+
+      let kategori = "";
+      let tips = "";
+
+      if (skor <= 4) {
+        kategori = "Ringan";
+        tips = `<ul>
+          <li>Lakukan aktivitas fisik ringan seperti jalan pagi</li>
+          <li>Berinteraksi dengan teman dekat atau keluarga</li>
+          <li>Lakukan aktivitas hobi menyenangkan</li>
+          <li><b>Medis:</b> Konsultasi awal dengan psikolog</li>
+          <li><b>Medis:</b> Gunakan layanan konseling daring</li>
+        </ul>`;
+      } else if (skor <= 14) {
+        kategori = "Sedang";
+        tips = `<ul>
+          <li>Atur rutinitas harian dan istirahat yang cukup</li>
+          <li>Kurangi konsumsi media sosial berlebihan</li>
+          <li>Coba teknik relaksasi seperti meditasi</li>
+          <li><b>Medis:</b> Pertimbangkan terapi kognitif perilaku</li>
+          <li><b>Medis:</b> Kunjungi psikolog untuk evaluasi lanjut</li>
+        </ul>`;
+      } else {
+        kategori = "Berat";
+        tips = `<ul>
+          <li>Jangan menyendiri, hubungi orang terpercaya</li>
+          <li>Batasi beban kerja dan beri waktu pemulihan</li>
+          <li>Coba menulis jurnal perasaan harian</li>
+          <li><b>Medis:</b> Segera konsultasi psikiater</li>
+          <li><b>Medis:</b> Evaluasi untuk kemungkinan pengobatan</li>
+        </ul>`;
+      }
+
+      document.getElementById("result").innerHTML = `
+        <h3>Hasil Anda: Skor ${skor} (${kategori})</h3>
+        <p>Saran dan tips untuk Anda:</p>
+        ${tips}
+      `;
+
+      const log = `Tes Depresi: Skor ${skor} (${kategori}) - ${new Date().toLocaleString()}`;
+      let rekap = JSON.parse(localStorage.getItem("rekapHasil")) || [];
+      rekap.push(log);
+      localStorage.setItem("rekapHasil", JSON.stringify(rekap));
+      renderRekap();
+    });
+
+    function  renderRekap() {
+      const rekap = JSON.parse(localStorage.getItem("rekapHasil")) || [];
+      const rekapList = document.getElementById("rekap");
+      rekapList.innerHTML = "";
+      rekap.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        rekapList.appendChild(li);
+      });
+    }
+
+    document.addEventListener("change", function(e) {
+      if (e.target.matches('input[type="radio"]')) {
+        const group = e.target.name;
+        document.querySelectorAll(`input[name="${group}"]`).forEach(input => {
+          input.parentElement.classList.remove("selected");
+        });
+        e.target.parentElement.classList.add("selected");
+      }
+    });
+function clearHistory() {
+  if (confirm("Apakah Anda yakin ingin menghapus semua riwayat hasil tes?")) {
+    localStorage.removeItem("rekapHasil");
+    renderRekap();
+    alert("Riwayat berhasil dihapus.");
+  }
+}
+    renderRekap();
+  </script>
+</body>
+</html>
