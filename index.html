@@ -135,32 +135,40 @@
       let kategori = "";
       let tips = "";
 
-      if (skor <= 4) {
+            if (skor <= 4) {
+        kategori = "Minimal";
+        tips = `<ul>
+          <li>Pertahankan gaya hidup sehat dan seimbang</li>
+          <li>Teruskan aktivitas positif dan dukungan sosial</li>
+          <li><b>Medis:</b> Tidak diperlukan penanganan khusus</li>
+        </ul>`;
+      } else if (skor <= 9) {
         kategori = "Ringan";
         tips = `<ul>
-          <li>Lakukan aktivitas fisik ringan seperti jalan pagi</li>
-          <li>Berinteraksi dengan teman dekat atau keluarga</li>
-          <li>Lakukan aktivitas hobi menyenangkan</li>
-          <li><b>Medis:</b> Konsultasi awal dengan psikolog</li>
-          <li><b>Medis:</b> Gunakan layanan konseling daring</li>
+          <li>Perbanyak aktivitas fisik seperti jalan pagi</li>
+          <li>Berinteraksi sosial secara rutin</li>
+          <li><b>Medis:</b> Konsultasi dengan psikolog bila berlanjut</li>
         </ul>`;
       } else if (skor <= 14) {
         kategori = "Sedang";
         tips = `<ul>
-          <li>Atur rutinitas harian dan istirahat yang cukup</li>
-          <li>Kurangi konsumsi media sosial berlebihan</li>
-          <li>Coba teknik relaksasi seperti meditasi</li>
-          <li><b>Medis:</b> Pertimbangkan terapi kognitif perilaku</li>
-          <li><b>Medis:</b> Kunjungi psikolog untuk evaluasi lanjut</li>
+          <li>Buat jadwal aktivitas harian terstruktur</li>
+          <li>Praktikkan relaksasi atau meditasi</li>
+          <li><b>Medis:</b> Pertimbangkan konseling atau terapi CBT</li>
+        </ul>`;
+      } else if (skor <= 19) {
+        kategori = "Depresi Moderat";
+        tips = `<ul>
+          <li>Batasi beban kerja & beri waktu istirahat</li>
+          <li>Jalani aktivitas sosial & spiritual yang membangun</li>
+          <li><b>Medis:</b> Rujuk ke psikolog/psikiater untuk evaluasi lanjut</li>
         </ul>`;
       } else {
-        kategori = "Berat";
+        kategori = "Depresi Berat";
         tips = `<ul>
-          <li>Jangan menyendiri, hubungi orang terpercaya</li>
-          <li>Batasi beban kerja dan beri waktu pemulihan</li>
-          <li>Coba menulis jurnal perasaan harian</li>
-          <li><b>Medis:</b> Segera konsultasi psikiater</li>
-          <li><b>Medis:</b> Evaluasi untuk kemungkinan pengobatan</li>
+          <li>Segera cari dukungan sosial & profesional</li>
+          <li>Catat pikiran negatif dan ubah menjadi afirmasi</li>
+          <li><b>Medis:</b> Butuh evaluasi intensif, pertimbangkan intervensi farmakologis</li>
         </ul>`;
       }
 
